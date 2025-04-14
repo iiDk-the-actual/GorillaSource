@@ -2,6 +2,8 @@
   <a href="#"><img src="Resources/goldsrc.png"></a>
 </p>
 
+---
+
 ﻿# GorillaSource  
 A mod for Gorilla Tag porting bunny hopping from GoldSrc and Source engines.
 
