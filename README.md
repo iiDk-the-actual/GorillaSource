@@ -1,5 +1,5 @@
 ﻿# GorillaSource  
-> A mod for Gorilla Tag porting bunny hopping from GoldSrc and Source engines.
+A mod for Gorilla Tag porting bunny hopping from GoldSrc and Source engines.
 
 ---
 
