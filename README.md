@@ -22,7 +22,7 @@ A mod for Gorilla Tag porting bunny hopping from GoldSrc and Source engines.
 ## 📦 Installation
 
 1. Make sure **BepInEx** is installed for Gorilla Tag.
-2. Download the latest `GorillaSource.dll` from the [Releases](https://github.com/your-repo/releases) page.
+2. Download the latest `GorillaSource.dll` from the [Releases](https://github.com/GorillaSource/releases) page.
 3. Drop the DLL into your `BepInEx/plugins` folder.
 4. Launch Gorilla Tag and start hopping!
 
