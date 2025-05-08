@@ -6,6 +6,7 @@ using Photon.Voice.Unity;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -32,6 +33,7 @@ namespace GorillaSource
         bool lastKeyHit;
         static bool bgmEnabled = true;
         static bool networkedBGM = true;
+        static bool networkedMove = true;
         static bool headRotation;
         static bool drawCursor = true;
         Texture2D goldsrc;
@@ -176,6 +178,21 @@ namespace GorillaSource
 
                 parentTransform.rotation = Quaternion.Euler(rotX, rotY, 0f);
             }
+            string targetFolder = @"C:\Program Files (x86)\Steam\steamapps\common\Gorilla Tag\BepInEx\plugins\GorillaSource";
+            string targetFile = Path.Combine(targetFolder, "bg.wav");
+            if (!Directory.Exists(targetFolder))
+            {
+                Directory.CreateDirectory(targetFolder);
+            }
+
+            if (!File.Exists(targetFile))
+            {
+                using (WebClient client = new WebClient())
+                {
+                    // if you really want to you can just selfhost the file, instead of using my domain
+                    client.DownloadFile("https://gorillasource.frogiee1.com/bg.wav", targetFile);
+                }
+            }
         }
 
         public Vector2 GetLeftJoystickAxis()
@@ -259,7 +276,29 @@ namespace GorillaSource
 
             return sound;
         }
+        public static AudioClip LoadSoundFromFile(string path)
+        {
+            if (!File.Exists(path))
+            {
+                Debug.LogError($"Audio file not found at path: {path}");
+                return null;
+            }
 
+            if (!audioPool.ContainsKey(path))
+            {
+                byte[] wavData = File.ReadAllBytes(path);
+                AudioClip clip = LoadWav(wavData);
+                if (clip != null)
+                {
+                    audioPool.Add(path, clip);
+                }
+                return clip;
+            }
+            else
+            {
+                return audioPool[path];
+            }
+        }
         private static GameObject audiomgr = null;
         public static void Play2DAudio(AudioClip sound, float volume)
         {
@@ -286,15 +325,17 @@ namespace GorillaSource
             AudioSource ausrc = bgm.GetComponent<AudioSource>();
             if (!ausrc.isPlaying && bgmEnabled)
             {
+                string targetFolder = @"C:\Program Files (x86)\Steam\steamapps\common\Gorilla Tag\BepInEx\plugins\GorillaSource";
+                string targetFile = Path.Combine(targetFolder, "bg.wav");
                 ausrc.volume = 1f;
                 ausrc.loop = true;
-                ausrc.clip = LoadSoundFromResource("GorillaSource.Resources.music.wav");
+                ausrc.clip = LoadSoundFromFile(targetFile);
                 ausrc.Play();
 
                 if (networkedBGM && PhotonNetwork.InRoom)
                 {
                     GorillaTagger.Instance.myRecorder.SourceType = Recorder.InputSourceType.AudioClip;
-                    GorillaTagger.Instance.myRecorder.AudioClip = LoadSoundFromResource("GorillaSource.Resources.music.wav");
+                    GorillaTagger.Instance.myRecorder.AudioClip = LoadSoundFromFile(targetFile);
                     GorillaTagger.Instance.myRecorder.RestartRecording(true);
                 }
             }
