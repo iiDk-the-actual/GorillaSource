@@ -32,8 +32,10 @@ namespace GorillaSource
         bool lastKeyHit;
         static bool bgmEnabled = true;
         static bool networkedBGM = true;
+        static bool sfx = true;
         static bool headRotation;
         static bool drawCursor = true;
+        static float keyDelay;
         Texture2D goldsrc;
         Texture2D cursor;
         void OnGUI()
@@ -102,16 +104,25 @@ namespace GorillaSource
                     GUI.Label(new Rect(220f, 85f, 800f, 25f), "Sensitivity: " + (sensitivity * 100).ToString("F0"));
 
                     bgmEnabled = GUI.Toggle(new Rect(10f, 100f, 200f, 15f), bgmEnabled, "BGM");
+                    sfx = GUI.Toggle(new Rect(210f, 100f, 200f, 15f), sfx, "SFX");
                     networkedBGM = GUI.Toggle(new Rect(10f, 115f, 200f, 15f), networkedBGM, "Networked BGM");
 
                     headRotation = GUI.Toggle(new Rect(10f, 145f, 200f, 15f), headRotation, "Head Rotation");
 
                     drawCursor = GUI.Toggle(new Rect(10f, 175f, 200f, 15f), drawCursor, "Crosshair");
+
+                    if (GUI.Button(new Rect(10f, 205f, 50f, 15f), "Unload"))
+                    {
+                        isSource = false;
+                        keyDelay = Time.time + 1f;
+
+                        Destroy(strafe);
+                    }
                 }
             }
             else
             {
-                if (UnityInput.Current.GetKey(keyTarget) && !lastKeyHit)
+                if (UnityInput.Current.GetKey(keyTarget) && !lastKeyHit && Time.time > keyDelay)
                 {
                     isSource = true;
                     isSourceTime = Time.time;
@@ -263,6 +274,9 @@ namespace GorillaSource
         private static GameObject audiomgr = null;
         public static void Play2DAudio(AudioClip sound, float volume)
         {
+            if (!sfx)
+                return;
+
             if (audiomgr == null)
             {
                 audiomgr = new GameObject("2DAudioMgr");
@@ -277,6 +291,9 @@ namespace GorillaSource
         private static GameObject bgm = null;
         public static void PlaySoundtrack()
         {
+            if (!sfx)
+                return;
+
             if (bgm == null)
             {
                 bgm = new GameObject("2DAudioMgrbgm");
@@ -322,6 +339,9 @@ namespace GorillaSource
         private static GameObject walk = null;
         public static void PlayWalk()
         {
+            if (!sfx)
+                return;
+
             if (walk == null)
             {
                 walk = new GameObject("2DAudioMgrwalk");
