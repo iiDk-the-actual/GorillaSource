@@ -1,4 +1,10 @@
-﻿# GorillaSource  
+<p align="center">
+  <a href="#"><img src="https://i.imgur.com/GJL0dj1.png"></a>
+</p>
+
+---
+
+# GorillaSource  
 A mod for Gorilla Tag porting bunny hopping from GoldSrc and Source engines.
 
 ---
