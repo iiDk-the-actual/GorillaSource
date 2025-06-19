@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using GorillaLocomotion;
 using GorillaNetworking;
 using HarmonyLib;
 using Photon.Pun;
@@ -115,8 +116,10 @@ namespace GorillaSource
                     {
                         isSource = false;
                         keyDelay = Time.time + 1f;
-
                         Destroy(strafe);
+                        Traverse.Create(GTPlayer.Instance).Field("leftHandHolding").SetValue(false);
+                        Traverse.Create(GTPlayer.Instance).Field("rightHandHolding").SetValue(false);
+                        GTPlayer.Instance.disableMovement = false;
                     }
                 }
             }

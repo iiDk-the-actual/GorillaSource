@@ -7,6 +7,6 @@
     {
         public const string GUID = "com.goldentrophy.gorillatag.gorillasource";
         public const string Name = "GorillaSource";
-        public const string Version = "1.0.1";
+        public const string Version = "1.0.2";
     }
 }
